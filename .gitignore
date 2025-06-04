@@ -6,3 +6,5 @@ tags
 node_modules
 __pycache__
 chauffeur_customer/public/passenger**
+chauffeur_customer/www/*.html
+yarn.lock
