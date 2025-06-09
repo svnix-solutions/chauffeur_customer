@@ -12,6 +12,8 @@ import HelpPage from '@/pages/profile/HelpPage'
 import LoginPage from '@/pages/auth/LoginPage'
 import SignupPage from '@/pages/auth/SignupPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+import BookingPage from '@/pages/booking/BookingPage'
+import BookingSuccessPage from '@/pages/booking/BookingSuccessPage'
 import ProtectedRoute from '@/components/ProtectedRoute'
 
 // Create a client
@@ -67,6 +69,20 @@ function App() {
               <ProtectedRoute>
                 <MainLayout>
                   <HelpPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/book" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <BookingPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/bookings/:id" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <BookingSuccessPage />
                 </MainLayout>
               </ProtectedRoute>
             } />
