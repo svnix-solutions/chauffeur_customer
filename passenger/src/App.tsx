@@ -1,40 +1,82 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { FrappeProvider } from 'frappe-react-sdk'
-import { Button } from '@/components/ui/button'
+import { MainLayout } from '@/components/layout/MainLayout'
+import { HomePage } from '@/pages/HomePage'
+import ProfilePage from '@/pages/ProfilePage'
+import SettingsPage from '@/pages/profile/SettingsPage'
+import NotificationsPage from '@/pages/profile/NotificationsPage'
+import PrivacyPage from '@/pages/profile/PrivacyPage'
+import HelpPage from '@/pages/profile/HelpPage'
+import LoginPage from '@/pages/auth/LoginPage'
+import SignupPage from '@/pages/auth/SignupPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
+import ProtectedRoute from '@/components/ProtectedRoute'
+
+// Create a client
+const queryClient = new QueryClient()
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-	<div className="App">
-	  <FrappeProvider>
-		<Button>Click me</Button>
-		<div>
-	  <div>
-		<a href="https://vitejs.dev" target="_blank">
-		  <img src="/vite.svg" className="logo" alt="Vite logo" />
-		</a>
-		<a href="https://reactjs.org" target="_blank">
-		  <img src={reactLogo} className="logo react" alt="React logo" />
-		</a>
-	  </div>
-	  <h1>Vite + React + Frappe</h1>
-	  <div className="card">
-		<button onClick={() => setCount((count) => count + 1)}>
-		  count is {count}
-		</button>
-		<p>
-		  Edit <code>src/App.jsx</code> and save to test HMR
-		</p>
-	  </div>
-	  <p className="read-the-docs">
-		Click on the Vite and React logos to learn more
-	  </p>
-	  </div>
-	  </FrappeProvider>
-	</div>
+    <QueryClientProvider client={queryClient}>
+      <FrappeProvider>
+        <Router basename="/passenger">
+          <Routes>
+            {/* Public routes without MainLayout */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+
+            {/* Protected routes with MainLayout */}
+            <Route path="/" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <HomePage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ProfilePage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/settings" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <SettingsPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/notifications" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <NotificationsPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/privacy" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <PrivacyPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/help" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <HelpPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+
+            {/* Catch all route - 404 */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+      </FrappeProvider>
+    </QueryClientProvider>
   )
 }
 
