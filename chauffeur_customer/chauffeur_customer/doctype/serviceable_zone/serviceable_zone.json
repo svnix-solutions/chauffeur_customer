@@ -1,0 +1,120 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:code",
+ "creation": "2024-03-21 10:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "serviceable_zone_name",
+  "serviceable_city",
+  "is_active",
+  "description",
+  "base_price",
+  "distance_multiplier",
+  "time_multiplier"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "serviceable_zone_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Serviceable Zone Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "serviceable_city",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Serviceable City",
+   "options": "Serviceable City",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "base_price",
+   "fieldtype": "Currency",
+   "label": "Base Price",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "distance_multiplier",
+   "fieldtype": "Float",
+   "label": "Distance Multiplier",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "time_multiplier",
+   "fieldtype": "Float",
+   "label": "Time Multiplier",
+   "precision": "2",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-12 16:54:38.264951",
+ "modified_by": "Administrator",
+ "module": "Chauffeur Customer",
+ "name": "Serviceable Zone",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Chauffeur Customer"
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Chauffeur Driver"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

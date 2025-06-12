@@ -19,7 +19,7 @@ interface BookingDetailsStepProps {
   updateFormData: (data: Partial<BookingFormData>) => void
   onNext: () => void
   onBack: () => void
-  selectedCity: string
+  selectedServiceableCity: string
 }
 
 export function BookingDetailsStep({
@@ -27,24 +27,24 @@ export function BookingDetailsStep({
   updateFormData,
   onNext,
   onBack,
-  selectedCity
+  selectedServiceableCity
 }: BookingDetailsStepProps) {
   const [date, setDate] = useState<Date | undefined>(
     formData.date ? new Date(formData.date) : undefined
   )
   const [calendarOpen, setCalendarOpen] = useState(false)
-  const [zone, setZone] = useState(formData.zone || "")
-  const [zones, setZones] = useState<string[]>([])
+  const [serviceableZone, setServiceableZone] = useState(formData.serviceable_zone || "")
+  const [serviceableZones, setServiceableZones] = useState<string[]>([])
 
   useEffect(() => {
     // TODO: Replace with backend call
-    if (selectedCity === 'Mumbai') setZones(['South Mumbai', 'Andheri', 'Borivali'])
-    else if (selectedCity === 'Delhi') setZones(['South Delhi', 'Dwarka', 'Rohini'])
-    else if (selectedCity === 'Bangalore') setZones(['Whitefield', 'Koramangala', 'Indiranagar'])
-    else setZones([])
-    setZone("")
-    updateFormData({ zone: "" })
-  }, [selectedCity])
+    if (selectedServiceableCity === 'Mumbai') setServiceableZones(['South Mumbai', 'Andheri', 'Borivali'])
+    else if (selectedServiceableCity === 'Delhi') setServiceableZones(['South Delhi', 'Dwarka', 'Rohini'])
+    else if (selectedServiceableCity === 'Bangalore') setServiceableZones(['Whitefield', 'Koramangala', 'Indiranagar'])
+    else setServiceableZones([])
+    setServiceableZone("")
+    updateFormData({ serviceable_zone: "" })
+  }, [selectedServiceableCity])
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate)
@@ -78,14 +78,14 @@ export function BookingDetailsStep({
     })
   }
 
-  const handleZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setZone(e.target.value)
-    updateFormData({ zone: e.target.value })
+  const handleServiceableZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setServiceableZone(e.target.value)
+    updateFormData({ serviceable_zone: e.target.value })
   }
 
   const isFormValid = () => {
     return (
-      zone &&
+      serviceableZone &&
       formData.pickupLocation.address &&
       formData.dropLocation.address &&
       formData.date &&
@@ -97,17 +97,17 @@ export function BookingDetailsStep({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="zone">Zone</Label>
+        <Label htmlFor="serviceable_zone">Serviceable Zone</Label>
         <select
-          id="zone"
+          id="serviceable_zone"
           className="w-full mt-1 rounded border px-3 py-2"
-          value={zone}
-          onChange={handleZoneChange}
+          value={serviceableZone}
+          onChange={handleServiceableZoneChange}
           required
-          disabled={!selectedCity}
+          disabled={!selectedServiceableCity}
         >
-          <option value="" disabled>Select zone</option>
-          {zones.map(z => <option key={z} value={z}>{z}</option>)}
+          <option value="" disabled>Select serviceable zone</option>
+          {serviceableZones.map(z => <option key={z} value={z}>{z}</option>)}
         </select>
       </div>
       <div className="grid grid-cols-1 gap-4">

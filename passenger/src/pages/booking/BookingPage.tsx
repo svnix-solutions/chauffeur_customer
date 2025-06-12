@@ -29,8 +29,8 @@ export interface BookingFormData {
   gearType: "manual" | "automatic" | "imt"
   saveToGarage: boolean
   numberOfDays?: number // For outstation
-  zone?: string // Added for zone selection
-  city?: string // Added for city selection
+  serviceable_zone?: string // Renamed for zone selection
+  serviceable_city?: string // Renamed for city selection
 }
 
 const initialFormData: BookingFormData = {
@@ -51,8 +51,8 @@ const initialFormData: BookingFormData = {
   vehicleType: "sedan",
   gearType: "manual",
   saveToGarage: false,
-  zone: "",
-  city: ""
+  serviceable_zone: "",
+  serviceable_city: ""
 }
 
 export default function BookingPage() {
@@ -84,8 +84,8 @@ export default function BookingPage() {
       case 2:
         return (
           <CityStep
-            onSelect={(city) => {
-              updateFormData({ city })
+            onSelect={(serviceable_city) => {
+              updateFormData({ serviceable_city })
               nextStep()
             }}
           />
@@ -97,7 +97,7 @@ export default function BookingPage() {
             updateFormData={updateFormData}
             onNext={nextStep}
             onBack={prevStep}
-            selectedCity={formData.city || ""}
+            selectedServiceableCity={formData.serviceable_city || ""}
           />
         )
       case 4:

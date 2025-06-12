@@ -1,0 +1,273 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:RIDE-{####}",
+ "creation": "2024-03-21 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "status",
+  "booking_type",
+  "pickup_section",
+  "pickup_location",
+  "pickup_lat",
+  "pickup_lng",
+  "dropoff_section",
+  "dropoff_location",
+  "dropoff_lat",
+  "dropoff_lng",
+  "scheduled_time",
+  "duration",
+  "vehicle_type",
+  "serviceable_city",
+  "serviceable_zone",
+  "driver_section",
+  "driver",
+  "driver_name",
+  "driver_phone",
+  "otp",
+  "amount_section",
+  "base_price",
+  "distance_price",
+  "time_price",
+  "vehicle_multiplier",
+  "peak_hour_multiplier",
+  "total_amount",
+  "payment_status",
+  "rating",
+  "feedback"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Pending\nAccepted\nOn the Way\nReached\nIn Progress\nCompleted\nCancelled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_type",
+   "fieldtype": "Select",
+   "label": "Booking Type",
+   "options": "immediate\nscheduled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pickup_section",
+   "fieldtype": "Section Break",
+   "label": "Pickup Details"
+  },
+  {
+   "fieldname": "pickup_location",
+   "fieldtype": "Data",
+   "label": "Pickup Location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pickup_lat",
+   "fieldtype": "Float",
+   "label": "Pickup Latitude",
+   "precision": "8,6"
+  },
+  {
+   "fieldname": "pickup_lng",
+   "fieldtype": "Float",
+   "label": "Pickup Longitude",
+   "precision": "8,6"
+  },
+  {
+   "fieldname": "dropoff_section",
+   "fieldtype": "Section Break",
+   "label": "Dropoff Details"
+  },
+  {
+   "fieldname": "dropoff_location",
+   "fieldtype": "Data",
+   "label": "Dropoff Location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "dropoff_lat",
+   "fieldtype": "Float",
+   "label": "Dropoff Latitude",
+   "precision": "8,6"
+  },
+  {
+   "fieldname": "dropoff_lng",
+   "fieldtype": "Float",
+   "label": "Dropoff Longitude",
+   "precision": "8,6"
+  },
+  {
+   "fieldname": "scheduled_time",
+   "fieldtype": "Datetime",
+   "label": "Scheduled Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "duration",
+   "fieldtype": "Int",
+   "label": "Duration (hours)"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Select",
+   "label": "Vehicle Type",
+   "options": "sedan\nsuv\nhatchback\npremium",
+   "reqd": 1
+  },
+  {
+   "fieldname": "serviceable_city",
+   "fieldtype": "Link",
+   "label": "Serviceable City",
+   "options": "Serviceable City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "serviceable_zone",
+   "fieldtype": "Link",
+   "label": "Serviceable Zone",
+   "options": "Serviceable Zone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "driver_section",
+   "fieldtype": "Section Break",
+   "label": "Driver Details"
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "Driver",
+   "options": "User"
+  },
+  {
+   "fieldname": "driver_name",
+   "fieldtype": "Data",
+   "label": "Driver Name"
+  },
+  {
+   "fieldname": "driver_phone",
+   "fieldtype": "Data",
+   "label": "Driver Phone"
+  },
+  {
+   "fieldname": "otp",
+   "fieldtype": "Data",
+   "label": "Trip Start OTP"
+  },
+  {
+   "fieldname": "amount_section",
+   "fieldtype": "Section Break",
+   "label": "Amount Details"
+  },
+  {
+   "fieldname": "base_price",
+   "fieldtype": "Currency",
+   "label": "Base Price"
+  },
+  {
+   "fieldname": "distance_price",
+   "fieldtype": "Currency",
+   "label": "Distance Price"
+  },
+  {
+   "fieldname": "time_price",
+   "fieldtype": "Currency",
+   "label": "Time Price"
+  },
+  {
+   "fieldname": "vehicle_multiplier",
+   "fieldtype": "Float",
+   "label": "Vehicle Multiplier",
+   "precision": "2,2"
+  },
+  {
+   "fieldname": "peak_hour_multiplier",
+   "fieldtype": "Float",
+   "label": "Peak Hour Multiplier",
+   "precision": "2,2"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Pending\nPaid\nFailed"
+  },
+  {
+   "fieldname": "rating",
+   "fieldtype": "Rating",
+   "label": "Rating"
+  },
+  {
+   "fieldname": "feedback",
+   "fieldtype": "Small Text",
+   "label": "Feedback"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-03-21 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Chauffeur Customer",
+ "name": "Ride",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Chauffeur Customer",
+   "share": 0,
+   "write": 0
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Chauffeur Driver",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+} 

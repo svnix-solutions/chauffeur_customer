@@ -63,13 +63,13 @@ def create_booking(
     duration,
     vehicle_type,
     customer_name=None,
-    customer_email=None
+    customer_email=None,
+    city=None,
+    zone=None
 ):
     """
-    Dummy API to create a booking. Returns a mock booking confirmation.
+    Create a new booking and return confirmation in the expected format.
     """
-    import random
-    import string
     import json
 
     # Parse locations if they are JSON strings
@@ -78,45 +78,89 @@ def create_booking(
     if isinstance(drop_location, str):
         drop_location = frappe.parse_json(drop_location)
 
-    # Generate a random booking ID
-    booking_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-
-    # Return a mock confirmation
-    return {
-        "booking_id": booking_id,
-        "status": "confirmed",
-        "booking": {
+    try:
+        # Create the ride document
+        ride = frappe.get_doc({
+            "doctype": "Ride",
+            "customer": frappe.session.user,
+            "pickup_location": pickup_location.get("address", ""),
+            "dropoff_location": drop_location.get("address", ""),
+            "pickup_lat": pickup_location.get("lat"),
+            "pickup_lng": pickup_location.get("lng"),
+            "dropoff_lat": drop_location.get("lat"),
+            "dropoff_lng": drop_location.get("lng"),
+            "scheduled_time": f"{date} {time}",
             "booking_type": booking_type,
-            "pickup_location": pickup_location,
-            "drop_location": drop_location,
-            "date": date,
-            "time": time,
             "duration": duration,
             "vehicle_type": vehicle_type,
-            "customer_name": customer_name,
-            "customer_email": customer_email
+            "serviceable_city": city,
+            "serviceable_zone": zone,
+            "status": "Pending"
+        })
+        ride.insert()
+
+        # Return in the expected format
+        return {
+            "booking_id": ride.name,
+            "status": "confirmed",
+            "booking": {
+                "booking_type": booking_type,
+                "pickup_location": pickup_location,
+                "drop_location": drop_location,
+                "date": date,
+                "time": time,
+                "duration": duration,
+                "vehicle_type": vehicle_type,
+                "customer_name": customer_name,
+                "customer_email": customer_email,
+                "city": city,
+                "zone": zone
+            }
         }
-    }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Booking Creation Error")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 @frappe.whitelist(allow_guest=True)
 def get_booking(booking_id):
     """
-    Dummy API to retrieve a booking by booking_id. Returns a mock booking object.
+    Get booking details in the expected format.
     """
-    # Mock booking data
-    booking = {
-        "booking_id": booking_id,
-        "status": "confirmed",
-        "booking": {
-            "booking_type": "standard",
-            "pickup_location": {"lat": 12.9716, "lng": 77.5946, "address": "Yashwantpur, Bangalore"},
-            "drop_location": {"lat": 13.0827, "lng": 80.2707, "address": "123, Clock Tower, Chennai"},
-            "date": "2023-10-01",
-            "time": "10:00 AM",
-            "duration": 2,
-            "vehicle_type": "sedan",
-            "customer_name": "John Doe",
-            "customer_email": "john.doe@example.com"
+    try:
+        ride = frappe.get_doc("Ride", booking_id)
+        
+        # Return in the expected format
+        return {
+            "booking_id": ride.name,
+            "status": ride.status,
+            "booking": {
+                "booking_type": ride.booking_type,
+                "pickup_location": {
+                    "lat": ride.pickup_lat,
+                    "lng": ride.pickup_lng,
+                    "address": ride.pickup_location
+                },
+                "drop_location": {
+                    "lat": ride.dropoff_lat,
+                    "lng": ride.dropoff_lng,
+                    "address": ride.dropoff_location
+                },
+                "date": ride.scheduled_time.split()[0],
+                "time": ride.scheduled_time.split()[1],
+                "duration": ride.duration,
+                "vehicle_type": ride.vehicle_type,
+                "customer_name": ride.customer_name,
+                "customer_email": ride.customer_email,
+                "serviceable_city": ride.serviceable_city,
+                "serviceable_zone": ride.serviceable_zone
+            }
         }
-    }
-    return booking
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Get Booking Error")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
