@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { MapPinIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, ClockIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 
 export function HomePage() {
   return (
@@ -20,6 +20,19 @@ export function HomePage() {
             <div>
               <h2 className="font-semibold text-gray-900">Book a Ride</h2>
               <p className="text-sm text-gray-600">Get a ride to your destination</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          to="/current-ride"
+          className="block p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:border-blue-500 transition-colors"
+        >
+          <div className="flex items-center">
+            <ArrowTrendingUpIcon className="h-6 w-6 text-green-600 mr-3" />
+            <div>
+              <h2 className="font-semibold text-gray-900">Current Ride</h2>
+              <p className="text-sm text-gray-600">Track your ongoing ride</p>
             </div>
           </div>
         </Link>

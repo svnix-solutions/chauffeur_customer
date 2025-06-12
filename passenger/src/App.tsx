@@ -15,6 +15,8 @@ import { NotFoundPage } from '@/pages/NotFoundPage'
 import BookingPage from '@/pages/booking/BookingPage'
 import BookingSuccessPage from '@/pages/booking/BookingSuccessPage'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import CurrentRidePage from './pages/CurrentRidePage'
+import RideDetailsPage from '@/pages/RideDetailsPage'
 
 // Create a client
 const queryClient = new QueryClient()
@@ -83,6 +85,14 @@ function App() {
               <ProtectedRoute>
                 <MainLayout>
                   <BookingSuccessPage />
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="current-ride" element={<CurrentRidePage />} />
+            <Route path="/rides/:id" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <RideDetailsPage />
                 </MainLayout>
               </ProtectedRoute>
             } />

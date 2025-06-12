@@ -5,6 +5,7 @@ import { BookingDetailsStep } from "./steps/BookingDetailsStep"
 import { VehicleDetailsStep } from "./steps/VehicleDetailsStep"
 import { PricingStep } from "./steps/PricingStep"
 import { ConfirmationStep } from "./steps/ConfirmationStep"
+import CityStep from "./steps/CityStep"
 
 export type BookingType = "hourly" | "full_day" | "outstation"
 
@@ -28,6 +29,8 @@ export interface BookingFormData {
   gearType: "manual" | "automatic" | "imt"
   saveToGarage: boolean
   numberOfDays?: number // For outstation
+  zone?: string // Added for zone selection
+  city?: string // Added for city selection
 }
 
 const initialFormData: BookingFormData = {
@@ -47,7 +50,9 @@ const initialFormData: BookingFormData = {
   duration: 1,
   vehicleType: "sedan",
   gearType: "manual",
-  saveToGarage: false
+  saveToGarage: false,
+  zone: "",
+  city: ""
 }
 
 export default function BookingPage() {
@@ -78,14 +83,24 @@ export default function BookingPage() {
         )
       case 2:
         return (
+          <CityStep
+            onSelect={(city) => {
+              updateFormData({ city })
+              nextStep()
+            }}
+          />
+        )
+      case 3:
+        return (
           <BookingDetailsStep
             formData={formData}
             updateFormData={updateFormData}
             onNext={nextStep}
             onBack={prevStep}
+            selectedCity={formData.city || ""}
           />
         )
-      case 3:
+      case 4:
         return (
           <VehicleDetailsStep
             formData={formData}
@@ -94,7 +109,7 @@ export default function BookingPage() {
             onBack={prevStep}
           />
         )
-      case 4:
+      case 5:
         return (
           <PricingStep
             formData={formData}
@@ -102,7 +117,7 @@ export default function BookingPage() {
             onBack={prevStep}
           />
         )
-      case 5:
+      case 6:
         return (
           <ConfirmationStep
             formData={formData}
@@ -119,8 +134,8 @@ export default function BookingPage() {
       {/* Stepper above the card, centered and responsive */}
       <div className="w-full max-w-md flex flex-col items-center mb-4">
         <div className="flex items-center justify-center w-full gap-2">
-          {[1, 2, 3, 4, 5].map((step) => (
-            <div key={step} className={`flex items-center ${step < 5 ? "w-full" : ""}`}>
+          {[1, 2, 3, 4, 5, 6].map((step) => (
+            <div key={step} className={`flex items-center ${step < 6 ? "w-full" : ""}`}>
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center border-2 text-sm font-medium z-10 bg-white ${
                   step < currentStep
@@ -132,7 +147,7 @@ export default function BookingPage() {
               >
                 {step}
               </div>
-              {step < 5 && (
+              {step < 6 && (
                 <div
                   className={`h-0.5 flex-1 ${
                     step < currentStep

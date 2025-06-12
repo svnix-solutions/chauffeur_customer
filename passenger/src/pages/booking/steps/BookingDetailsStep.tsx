@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,18 +19,32 @@ interface BookingDetailsStepProps {
   updateFormData: (data: Partial<BookingFormData>) => void
   onNext: () => void
   onBack: () => void
+  selectedCity: string
 }
 
 export function BookingDetailsStep({
   formData,
   updateFormData,
   onNext,
-  onBack
+  onBack,
+  selectedCity
 }: BookingDetailsStepProps) {
   const [date, setDate] = useState<Date | undefined>(
     formData.date ? new Date(formData.date) : undefined
   )
   const [calendarOpen, setCalendarOpen] = useState(false)
+  const [zone, setZone] = useState(formData.zone || "")
+  const [zones, setZones] = useState<string[]>([])
+
+  useEffect(() => {
+    // TODO: Replace with backend call
+    if (selectedCity === 'Mumbai') setZones(['South Mumbai', 'Andheri', 'Borivali'])
+    else if (selectedCity === 'Delhi') setZones(['South Delhi', 'Dwarka', 'Rohini'])
+    else if (selectedCity === 'Bangalore') setZones(['Whitefield', 'Koramangala', 'Indiranagar'])
+    else setZones([])
+    setZone("")
+    updateFormData({ zone: "" })
+  }, [selectedCity])
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate)
@@ -64,8 +78,14 @@ export function BookingDetailsStep({
     })
   }
 
+  const handleZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setZone(e.target.value)
+    updateFormData({ zone: e.target.value })
+  }
+
   const isFormValid = () => {
     return (
+      zone &&
       formData.pickupLocation.address &&
       formData.dropLocation.address &&
       formData.date &&
@@ -76,6 +96,20 @@ export function BookingDetailsStep({
 
   return (
     <div className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="zone">Zone</Label>
+        <select
+          id="zone"
+          className="w-full mt-1 rounded border px-3 py-2"
+          value={zone}
+          onChange={handleZoneChange}
+          required
+          disabled={!selectedCity}
+        >
+          <option value="" disabled>Select zone</option>
+          {zones.map(z => <option key={z} value={z}>{z}</option>)}
+        </select>
+      </div>
       <div className="grid grid-cols-1 gap-4">
         <div className="space-y-2">
           <Label htmlFor="pickup">Pickup Location</Label>

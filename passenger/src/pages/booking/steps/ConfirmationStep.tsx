@@ -38,7 +38,9 @@ export function ConfirmationStep({
         vehicle_type: formData.vehicleType,
         registration_number: formData.registrationNumber,
         gear_type: formData.gearType,
-        save_to_garage: formData.saveToGarage
+        save_to_garage: formData.saveToGarage,
+        city: formData.city || '',
+        zone: formData.zone || ''
       })
 
       // Navigate to booking success page
