@@ -13,6 +13,7 @@ import { format } from "date-fns"
 import { CalendarIcon, MapPin, Clock } from "lucide-react"
 import type { BookingFormData } from "../BookingPage"
 import classNames from "react-day-picker/style.module.css";
+import { useFrappeGetDocList } from "frappe-react-sdk"
 
 interface BookingDetailsStepProps {
   formData: BookingFormData
@@ -34,14 +35,20 @@ export function BookingDetailsStep({
   )
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [serviceableZone, setServiceableZone] = useState(formData.serviceable_zone || "")
-  const [serviceableZones, setServiceableZones] = useState<string[]>([])
+
+  // Fetch zones dynamically using frappe-react-sdk
+  const { data: serviceableZones, isLoading: isLoadingZones, error: errorZones } = useFrappeGetDocList<{ name: string }>(
+    "Serviceable Zone",
+    selectedServiceableCity
+      ? {
+          fields: ["name"],
+          filters: [["serviceable_city", "=", selectedServiceableCity]],
+          orderBy: { field: "name", order: "asc" }
+        }
+      : { fields: ["name"] }
+  )
 
   useEffect(() => {
-    // TODO: Replace with backend call
-    if (selectedServiceableCity === 'Mumbai') setServiceableZones(['South Mumbai', 'Andheri', 'Borivali'])
-    else if (selectedServiceableCity === 'Delhi') setServiceableZones(['South Delhi', 'Dwarka', 'Rohini'])
-    else if (selectedServiceableCity === 'Bangalore') setServiceableZones(['Whitefield', 'Koramangala', 'Indiranagar'])
-    else setServiceableZones([])
     setServiceableZone("")
     updateFormData({ serviceable_zone: "" })
   }, [selectedServiceableCity])
@@ -78,11 +85,6 @@ export function BookingDetailsStep({
     })
   }
 
-  const handleServiceableZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setServiceableZone(e.target.value)
-    updateFormData({ serviceable_zone: e.target.value })
-  }
-
   const isFormValid = () => {
     return (
       serviceableZone &&
@@ -102,12 +104,23 @@ export function BookingDetailsStep({
           id="serviceable_zone"
           className="w-full mt-1 rounded border px-3 py-2"
           value={serviceableZone}
-          onChange={handleServiceableZoneChange}
+          onChange={e => {
+            setServiceableZone(e.target.value)
+            updateFormData({ serviceable_zone: e.target.value })
+          }}
           required
-          disabled={!selectedServiceableCity}
+          disabled={!selectedServiceableCity || isLoadingZones}
         >
-          <option value="" disabled>Select serviceable zone</option>
-          {serviceableZones.map(z => <option key={z} value={z}>{z}</option>)}
+          <option value="" disabled>
+            {isLoadingZones
+              ? "Loading zones..."
+              : errorZones
+              ? "Failed to load zones"
+              : "Select serviceable zone"}
+          </option>
+          {serviceableZones?.map(z => (
+            <option key={z.name} value={z.name}>{z.name}</option>
+          ))}
         </select>
       </div>
       <div className="grid grid-cols-1 gap-4">

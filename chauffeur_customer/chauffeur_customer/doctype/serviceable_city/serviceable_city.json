@@ -2,13 +2,15 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:code",
- "creation": "2024-03-21 10:00:00.000000",
+ "creation": "2024-03-21 10:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "code",
   "serviceable_city_name",
+  "state",
+  "country",
   "is_active",
   "description",
   "image"
@@ -30,11 +32,11 @@
    "reqd": 1
   },
   {
+   "default": "1",
    "fieldname": "is_active",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Is Active",
-   "default": 1
+   "label": "Is Active"
   },
   {
    "fieldname": "description",
@@ -45,14 +47,27 @@
    "fieldname": "image",
    "fieldtype": "Attach Image",
    "label": "City Image"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State",
+   "reqd": 1
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Data",
+   "label": "Country",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-21 10:00:00.000000",
+ "modified": "2025-06-12 17:16:30.776711",
  "modified_by": "Administrator",
  "module": "Chauffeur Customer",
  "name": "Serviceable City",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -68,32 +83,25 @@
    "write": 1
   },
   {
-   "create": 0,
-   "delete": 0,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Chauffeur Customer",
-   "share": 0,
-   "write": 0
+   "role": "Chauffeur Customer"
   },
   {
-   "create": 0,
-   "delete": 0,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Chauffeur Driver",
-   "share": 0,
-   "write": 0
+   "role": "Chauffeur Driver"
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
-} 
+}
