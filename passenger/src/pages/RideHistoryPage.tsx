@@ -44,8 +44,8 @@ export default function RideHistoryPage() {
       filters: [
         ['customer', '=', safeUser],
         ['status', 'in', ['Pending','Completed', 'Cancelled']],
-        ['creation', '>=', dateRange.from ? startOfDay(dateRange.from).toISOString() : undefined],
-        ['creation', '<=', dateRange.to ? endOfDay(dateRange.to).toISOString() : undefined],
+        // ['creation', '>=', dateRange.from ? startOfDay(dateRange.from).toISOString() : undefined],
+        // ['creation', '<=', dateRange.to ? endOfDay(dateRange.to).toISOString() : undefined],
         ...(statusFilter !== 'all' ? [['status', '=', statusFilter]] : [])
       ],
       fields: [
