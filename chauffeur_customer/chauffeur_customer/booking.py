@@ -1,5 +1,16 @@
 import frappe
 from frappe import _
+import math
+
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371  # Earth radius in kilometers
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    a = math.sin(dphi/2)**2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda/2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
 
 @frappe.whitelist(allow_guest=True)
 def calculate_price(
@@ -9,7 +20,9 @@ def calculate_price(
     date,
     time,
     duration,
-    vehicle_type
+    vehicle_type,
+    serviceable_city=None,
+    serviceable_zone=None
 ):
     """
     Calculate the price for a booking based on input parameters.
@@ -22,21 +35,45 @@ def calculate_price(
     if isinstance(drop_location, str):
         drop_location = frappe.parse_json(drop_location)
 
-    # Example: Calculate distance (replace with Google Maps API if needed)
-    # For now, let's use a dummy distance
-    distance_km = 10
+    # Calculate distance using haversine formula
+    pickup_lat = pickup_location.get("lat")
+    pickup_lng = pickup_location.get("lng")
+    drop_lat = drop_location.get("lat")
+    drop_lng = drop_location.get("lng")
+    if None not in (pickup_lat, pickup_lng, drop_lat, drop_lng):
+        distance_km = haversine(pickup_lat, pickup_lng, drop_lat, drop_lng)
+        if distance_km < 1:
+            distance_km = 1
+    else:
+        distance_km = 0
 
-    # Pricing logic
-    base_price = 100  # base fare
+    # 2. Fetch zone/city pricing
+    base_price = 100
     price_per_km = 15
     price_per_hour = 50
-    vehicle_multiplier = {
-        "sedan": 1.0,
-        "suv": 1.2,
-        "hatchback": 0.9,
-        "premium": 1.5,
-    }.get(vehicle_type, 1.0)
-    peak_hour_multiplier = 1.0  # You can add logic for peak hours
+    vehicle_multiplier = 1.0
+    peak_hour_multiplier = 1.0
+
+    # Try to get zone-specific pricing
+    if serviceable_zone:
+        try:
+            zone_doc = frappe.get_doc("Serviceable Zone", serviceable_zone)
+            base_price = zone_doc.base_price or base_price
+            price_per_km = zone_doc.distance_multiplier or price_per_km
+            price_per_hour = zone_doc.time_multiplier or price_per_hour
+        except Exception:
+            pass
+
+    # Vehicle type multiplier
+    if vehicle_type:
+        vehicle_multiplier = {
+            "sedan": 1.0,
+            "suv": 1.2,
+            "hatchback": 0.9,
+            "premium": 1.5,
+        }.get(vehicle_type, 1.0)
+
+    # TODO: Add peak hour logic based on time
 
     # Calculate price
     distance_price = distance_km * price_per_km
@@ -50,7 +87,11 @@ def calculate_price(
         "timePrice": time_price,
         "vehicleMultiplier": vehicle_multiplier,
         "peakHourMultiplier": peak_hour_multiplier,
+        "pricePerHour": round(price_per_hour, 2),
+        "pricePerKm": round(price_per_km, 2),
+        "duration": int(duration),
         "total": round(total, 2),
+        "distanceKm": round(distance_km, 2)
     }
 
 @frappe.whitelist(allow_guest=False)
