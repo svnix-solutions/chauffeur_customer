@@ -43,7 +43,7 @@ export default function RideHistoryPage() {
     {
       filters: [
         ['customer', '=', safeUser],
-        ['status', 'in', ['Completed', 'Cancelled']],
+        ['status', 'in', ['Pending','Completed', 'Cancelled']],
         ['creation', '>=', dateRange.from ? startOfDay(dateRange.from).toISOString() : undefined],
         ['creation', '<=', dateRange.to ? endOfDay(dateRange.to).toISOString() : undefined],
         ...(statusFilter !== 'all' ? [['status', '=', statusFilter]] : [])
@@ -179,6 +179,7 @@ export default function RideHistoryPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="Pending">Pending</SelectItem>
                   <SelectItem value="Completed">Completed</SelectItem>
                   <SelectItem value="Cancelled">Cancelled</SelectItem>
                 </SelectContent>

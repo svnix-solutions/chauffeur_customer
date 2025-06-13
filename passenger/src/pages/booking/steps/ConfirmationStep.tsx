@@ -39,14 +39,22 @@ export function ConfirmationStep({
         registration_number: formData.registrationNumber,
         gear_type: formData.gearType,
         save_to_garage: formData.saveToGarage,
-        city: formData.city || '',
-        zone: formData.zone || ''
+        city: formData.serviceable_city || '',
+        zone: formData.serviceable_zone || ''
       })
 
-      // Navigate to booking success page
-      navigate(`/bookings/${response.message.booking_id}`)
-    } catch (err) {
-      setError('Failed to create booking. Please try again.')
+      // Only navigate if booking was successful
+      if (response && response.message && response.message.status === 'confirmed' && response.message.booking_id) {
+        navigate(`/bookings/${response.message.booking_id}`)
+      } else {
+        setError(
+          response?.message?.message ||
+          response?.message ||
+          'Failed to create booking. Please try again.'
+        )
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Failed to create booking. Please try again.')
       console.error('Error creating booking:', err)
     } finally {
       setIsSubmitting(false)

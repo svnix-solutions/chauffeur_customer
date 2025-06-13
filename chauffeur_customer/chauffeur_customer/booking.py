@@ -120,6 +120,19 @@ def create_booking(
         drop_location = frappe.parse_json(drop_location)
 
     try:
+        # Calculate price using the same logic as PricingStep
+        price_breakdown = calculate_price(
+            booking_type=booking_type,
+            pickup_location=pickup_location,
+            drop_location=drop_location,
+            date=date,
+            time=time,
+            duration=duration,
+            vehicle_type=vehicle_type,
+            serviceable_city=city,
+            serviceable_zone=zone
+        )
+
         # Create the ride document
         ride = frappe.get_doc({
             "doctype": "Ride",
@@ -136,11 +149,17 @@ def create_booking(
             "vehicle_type": vehicle_type,
             "serviceable_city": city,
             "serviceable_zone": zone,
-            "status": "Pending"
+            "status": "Pending",
+            "base_price": price_breakdown["basePrice"],
+            "distance_price": price_breakdown["distancePrice"],
+            "time_price": price_breakdown["timePrice"],
+            "vehicle_multiplier": price_breakdown["vehicleMultiplier"],
+            "peak_hour_multiplier": price_breakdown["peakHourMultiplier"],
+            "total_amount": price_breakdown["total"]
         })
         ride.insert()
 
-        # Return in the expected format
+        # Return in the expected format, including price breakdown
         return {
             "booking_id": ride.name,
             "status": "confirmed",
@@ -155,7 +174,8 @@ def create_booking(
                 "customer_name": customer_name,
                 "customer_email": customer_email,
                 "city": city,
-                "zone": zone
+                "zone": zone,
+                "price_breakdown": price_breakdown
             }
         }
     except Exception as e:

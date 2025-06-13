@@ -60,7 +60,7 @@
    "fieldname": "booking_type",
    "fieldtype": "Select",
    "label": "Booking Type",
-   "options": "immediate\nscheduled",
+   "options": "hourly\nfull_day\noutstation\nimmediate\nscheduled",
    "reqd": 1
   },
   {
