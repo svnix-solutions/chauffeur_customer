@@ -13,13 +13,13 @@ interface UserProfile {
 export function useProfile() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { logout } = useFrappeAuth()
+  const { logout, currentUser } = useFrappeAuth()
 
   const { data: profile, isLoading } = useFrappeGetCall<{ message: UserProfile }>(
     'frappe.client.get',
     {
       doctype: 'User',
-      name: 'Administrator' // TODO: Replace with actual logged-in user
+      name: currentUser // Use the logged-in user's id/email
     }
   )
 
