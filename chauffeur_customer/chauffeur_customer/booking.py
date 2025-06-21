@@ -94,6 +94,54 @@ def calculate_price(
         "distanceKm": round(distance_km, 2)
     }
 
+def get_supplier_for_zone(zone, city):
+    """
+    Get the supplier for a given zone or city.
+    """
+    try:
+        # First try to find supplier by zone
+        if zone:
+            suppliers = frappe.get_all(
+                "Supplier",
+                filters={"custom_serviceable_zone": zone},
+                fields=["name"],
+                limit=1
+            )
+            if suppliers:
+                return suppliers[0].name
+        
+        # If no supplier found by zone, try by city
+        if city:
+            suppliers = frappe.get_all(
+                "Supplier",
+                filters={"custom_serviceable_city": city},
+                fields=["name"],
+                limit=1
+            )
+            if suppliers:
+                return suppliers[0].name
+        
+        return None
+    except Exception:
+        return None
+
+def get_customer_for_user(user):
+    """
+    Get the Customer record where user field equals the given user.
+    """
+    try:
+        customers = frappe.get_all(
+            "Customer",
+            filters={"user": user},
+            fields=["name"],
+            limit=1
+        )
+        if customers:
+            return customers[0].name
+        return None
+    except Exception:
+        return None
+
 @frappe.whitelist(allow_guest=False)
 def create_booking(
     booking_type,
@@ -136,7 +184,8 @@ def create_booking(
         # Create the ride document
         ride = frappe.get_doc({
             "doctype": "Ride",
-            "customer": frappe.session.user,
+            "user": frappe.session.user,
+            "customer": get_customer_for_user(frappe.session.user),
             "pickup_location": pickup_location.get("address", ""),
             "dropoff_location": drop_location.get("address", ""),
             "pickup_lat": pickup_location.get("lat"),

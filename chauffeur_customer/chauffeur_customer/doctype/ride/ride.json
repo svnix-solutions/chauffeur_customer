@@ -7,7 +7,9 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "user",
   "customer",
+  "supplier",
   "status",
   "booking_type",
   "pickup_section",
@@ -41,12 +43,26 @@
  ],
  "fields": [
   {
-   "fieldname": "customer",
+   "fieldname": "user",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Customer",
+   "label": "User",
    "options": "User",
    "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "reqd": 0
   },
   {
    "fieldname": "status",
