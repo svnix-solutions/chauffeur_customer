@@ -132,7 +132,7 @@ def get_customer_for_user(user):
     try:
         customers = frappe.get_all(
             "Customer",
-            filters={"user": user},
+            filters={"custom_user": user},
             fields=["name"],
             limit=1
         )
