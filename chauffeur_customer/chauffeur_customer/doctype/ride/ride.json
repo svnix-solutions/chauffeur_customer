@@ -37,6 +37,7 @@
   "vehicle_multiplier",
   "peak_hour_multiplier",
   "total_amount",
+  "received_amount",
   "payment_status",
   "rating",
   "feedback"
@@ -219,6 +220,11 @@
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount"
+  },
+  {
+   "fieldname": "received_amount",
+   "fieldtype": "Currency",
+   "label": "Received Amount"
   },
   {
    "fieldname": "payment_status",
